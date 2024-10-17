@@ -21,6 +21,7 @@ jobs:
       with:
         project_id: 'tutorial-emata-direct-wif'
         workload_identity_provider: 'projects/281608056900/locations/global/workloadIdentityPools/github/providers/tutorial-emata-direct-wif'
+        service_account: 'cloudbuild@tutorial-emata-direct-wif.iam.gserviceaccount.com'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
@@ -30,4 +31,6 @@ jobs:
 
     - name: 'Build and Push Docker Image'
       run: |
-        gcloud builds submit --tag asia-northeast1-docker.pkg.dev/tutorial-emata-direct-wif/my-docker-repo/my-image
+        gcloud builds submit
+          --service-account=cloudbuild@tutorial-emata-direct-wif.iam.gserviceaccount.com \
+          --tag asia-northeast1-docker.pkg.dev/tutorial-emata-direct-wif/my-docker-repo/my-image
