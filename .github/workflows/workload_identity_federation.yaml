@@ -19,7 +19,7 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        project_id: 'test-direct-workload-identity'
+        project_id: 'tutorial-emata-direct-wif'
         workload_identity_provider: 'projects/281608056900/locations/global/workloadIdentityPools/github/providers/tutorial-emata-direct-wif'
 
     - name: 'Set up Cloud SDK'
