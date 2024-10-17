@@ -1,9 +1,9 @@
 name: Get Secret
 on:
+  workflow_dispatch:
   push:
     branches:
-    - 'main'
-
+      - main
 jobs:
   get_secret:
     name: Get Secret from Secret Manager
