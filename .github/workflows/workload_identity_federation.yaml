@@ -28,3 +28,6 @@ jobs:
     - name: 'Get Secret'
       run: gcloud secrets versions access latest --secret="my-secret"  # シークレットを読み取り。
 
+    - name: 'Build and Push Docker Image'
+      run: |
+        gcloud builds submit --tag asia-northeast1-docker.pkg.dev/tutorial-emata-direct-wif/my-docker-repo/my-image
