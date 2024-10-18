@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 jobs:
   get_secret:
     name: Get Secret from Secret Manager
@@ -33,5 +34,5 @@ jobs:
       run: |
         gcloud builds submit \
           --tag asia-northeast1-docker.pkg.dev/tutorial-emata-direct-wif/my-docker-repo/my-image \
-          --service-account=281608056900-compute@developer.gserviceaccount.com \
-          --gcs-log-dir=tutorial-emata-direct-wif_cloudbuild/logs
+          --service-account="projects/tutorial-emata-direct-wif/serviceAccounts/281608056900-compute@developer.gserviceaccount.com" \
+          --gcs-log-dir=gs://tutorial-emata-direct-wif_cloudbuild/logs
