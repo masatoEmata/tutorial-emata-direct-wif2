@@ -1,10 +1,9 @@
 name: Get Secret
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main
-      - dev
+    - 'main'
+
 jobs:
   get_secret:
     name: Get Secret from Secret Manager
@@ -22,17 +21,10 @@ jobs:
       with:
         project_id: 'tutorial-emata-direct-wif'
         workload_identity_provider: 'projects/281608056900/locations/global/workloadIdentityPools/github/providers/tutorial-emata-direct-wif'
-        service_account: '281608056900-compute@developer.gserviceaccount.com'
-        # GitHub Actions のプリンシパルが Cloud Build サービスアカウントになりすますことを明示する。
+
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
     - name: 'Get Secret'
       run: gcloud secrets versions access latest --secret="my-secret"  # シークレットを読み取り。
 
-    - name: 'Build and Push Docker Image'
-      run: |
-        gcloud builds submit \
-          --tag asia-northeast1-docker.pkg.dev/tutorial-emata-direct-wif/my-docker-repo/my-image \
-          --service-account="projects/tutorial-emata-direct-wif/serviceAccounts/281608056900-compute@developer.gserviceaccount.com" \
-          --gcs-log-dir=gs://tutorial-emata-direct-wif_cloudbuild/logs
