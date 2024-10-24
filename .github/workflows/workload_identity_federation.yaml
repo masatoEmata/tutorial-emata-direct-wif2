@@ -40,5 +40,5 @@ jobs:
         gcloud builds submit \
           --project=${{ env.PROJECT_ID }} \
           --tag asia-northeast1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/my-image \
-          --service-account=${{ env.SERVICE_ACCOUNT_EMAIL }} \
+          --service-account=projects/${{ env.PROJECT_ID }}/serviceAccounts/${{ env.SERVICE_ACCOUNT_EMAIL }} \
           --gcs-log-dir='gs://${{ env.PROJECT_ID }}_cloudbuild/logs'
