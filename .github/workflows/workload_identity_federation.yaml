@@ -1,9 +1,15 @@
 name: Get Secret
 on:
+  workflow_dispatch:
   push:
     branches:
-    - 'main'
-
+      - main
+env:
+  SERVICE_ACCOUNT_EMAIL: 'github-actions-impersonated-sa@tutorial-emata-direct-wif.iam.gserviceaccount.com'
+  PROJECT_ID: 'tutorial-emata-direct-wif2'
+  PROJECT_NUM: '281608056900'
+  REPOSITORY: 'my-docker-repo'
+  GITHUB_REPO: 'tutorial-emata-direct-wif2'
 jobs:
   get_secret:
     name: Get Secret from Secret Manager
@@ -19,12 +25,20 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        project_id: 'tutorial-emata-direct-wif'
-        workload_identity_provider: 'projects/281608056900/locations/global/workloadIdentityPools/github/providers/tutorial-emata-direct-wif'
-
+        project_id: '${{ env.PROJECT_ID }}'
+        workload_identity_provider: 'projects/${{ env.PROJECT_NUM }}/locations/global/workloadIdentityPools/github/providers/${{ env.GITHUB_REPO }}'
+        service_account: '${{ env.SERVICE_ACCOUNT_EMAIL }}'
+        # GitHub Actions のプリンシパルが サービスアカウントになりすますことを明示。
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
     - name: 'Get Secret'
-      run: gcloud secrets versions access latest --secret="my-secret"  # シークレットを読み取り。
+      run: gcloud secrets versions access latest --secret="my-secret"
 
+    - name: 'Build and Push Docker Image'
+      run: |
+        gcloud builds submit \
+          --project=${{ env.PROJECT_ID }} \
+          --tag asia-northeast1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/my-image \
+          --service-account=${{ env.SERVICE_ACCOUNT_EMAIL }} \
+          --gcs-log-dir='gs://${{ env.PROJECT_ID }}_cloudbuild/logs'
