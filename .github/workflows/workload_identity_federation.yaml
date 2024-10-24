@@ -5,7 +5,7 @@ on:
     branches:
       - main
 env:
-  SERVICE_ACCOUNT_EMAIL: 'github-actions-impersonated-sa@tutorial-emata-direct-wif.iam.gserviceaccount.com'
+  SERVICE_ACCOUNT_EMAIL: 'github-actions-impersonated-sa@tutorial-emata-direct-wif2.iam.gserviceaccount.com'
   PROJECT_ID: 'tutorial-emata-direct-wif2'
   PROJECT_NUM: '809358225314'
   REPOSITORY: 'my-docker-repo'
