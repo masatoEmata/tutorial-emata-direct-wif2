@@ -1,6 +1,9 @@
-name: Direct Cloud Build with Workload Identity Federation
-on: workflow_dispatch
-
+name: Cloud Build with Workload Identity Federation
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 env:
   PROJECT_ID: 'tutorial-emata-direct-wif2'
   PROJECT_NUM: '809358225314'
@@ -8,6 +11,7 @@ env:
   GITHUB_REPO: 'tutorial-emata-direct-wif2'
   WORKER_POOL_NAME: 'gha-wif-vpcsc-build-private-pool'
   REGION: 'asia-northeast1'
+  IMAGE_NAME: 'my-image'
 jobs:
   get_secret:
     name: Get Secret from Secret Manager
@@ -31,14 +35,12 @@ jobs:
       with:
         project_id: '${{ env.PROJECT_ID }}'
 
-    - name: 'Get Secret'
-      run: gcloud secrets versions access latest --secret="my-secret"
-
-    - name: 'Build and Push Docker Image'
+    - name: 'Execute Cloud Build with cloudbuild.yaml'
       run: |
         gcloud builds submit \
+          --config=cloudbuild.yaml \
           --project=${{ env.PROJECT_ID }} \
-          --tag asia-northeast1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/my-image \
+          --region=${{ env.REGION }} \
+          --substitutions=_PROJECT_ID=${{ env.PROJECT_ID }},_REPOSITORY=${{ env.REPOSITORY }},_IMAGE_NAME=${{ env.IMAGE_NAME }},_REGION=${{ env.REGION }} \
           --gcs-log-dir='gs://${{ env.PROJECT_ID }}_cloudbuild/logs' \
           --worker-pool=projects/${{ env.PROJECT_ID }}/locations/${{ env.REGION }}/workerPools/${{ env.WORKER_POOL_NAME}} \
-          --verbosity debug
