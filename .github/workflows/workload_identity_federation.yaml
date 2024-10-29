@@ -1,9 +1,5 @@
 name: Cloud Build with Workload Identity Federation
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 env:
   PROJECT_ID: 'tutorial-emata-direct-wif2'
   PROJECT_NUM: '809358225314'
